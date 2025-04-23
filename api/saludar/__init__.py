@@ -2,6 +2,7 @@ import logging
 import azure.functions as func
 import requests
 import json
+import stripe
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Función "saludar" llamada.')
