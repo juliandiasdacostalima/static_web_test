@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prueba Azure Static Web App</title>
+</head>
+<body>
+  <h1>Hola Julian 👋</h1>
+  <button onclick="llamarAPI()">Llamar API</button>
+  <p id="respuesta"></p>
+
+  <script>
+    async function llamarAPI() {
+      const res = await fetch('/api/saludar');
+      const data = await res.json();
+      document.getElementById('respuesta').innerText = data.mensaje;
+    }
+  </script>
+</body>
+</html>
