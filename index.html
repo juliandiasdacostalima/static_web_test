@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Prueba Azure Static Web App</title>
+  <title>Menú</title>
 </head>
 <body>
-  <h1>Hola Julian 👋</h1>
-  <button onclick="llamarAPI()">Llamar API</button>
+  <h1>Menú</h1>
+
+  <label><input type="checkbox" value="burger" data-price="500"> Hamburguesa - 5€</label><br>
+  <label><input type="checkbox" value="fries" data-price="200"> Papas - 2€</label><br>
+  <label><input type="checkbox" value="drink" data-price="150"> Bebida - 1.5€</label><br><br>
+
+  <button onclick="enviarPedido()">Enviar pedido</button>
+
   <p id="respuesta"></p>
 
   <script>
-    async function llamarAPI() {
-      const res = await fetch('/api/saludar');
+    async function enviarPedido() {
+      const items = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(i => ({
+        id: i.value,
+        price: parseInt(i.dataset.price)
+      }));
+
+      const res = await fetch('/api/sumar_total', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+
       const data = await res.json();
-      document.getElementById('respuesta').innerText = data.mensaje;
+      document.getElementById('respuesta').innerText = `Total: €${(data.total / 100).toFixed(2)}`;
     }
   </script>
 </body>
