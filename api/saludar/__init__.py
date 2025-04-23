@@ -1,18 +1,20 @@
-import logging
-import azure.functions as func
-import requests
 import json
-import stripe
+import azure.functions as func
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Función "saludar" llamada.')
+    try:
+        data = req.get_json()
+        items = data.get("items", [])
 
-    # Llamado ficticio para demostrar uso de requests
-    r = requests.get("https://api.chucknorris.io/jokes/random")
-    data = r.json()
+        total = sum(item["price"] for item in items)
 
-    return func.HttpResponse(
-        json.dumps({"mensaje": f"Hola Julian! Chiste: {data['value']}"}),
-        mimetype="application/json",
-        status_code=200
-    )
+        return func.HttpResponse(
+            json.dumps({"total": total}),
+            mimetype="application/json"
+        )
+    except Exception as e:
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )
